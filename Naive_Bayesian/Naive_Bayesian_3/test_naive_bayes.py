@@ -8,10 +8,14 @@ from sklearn import naive_bayes
 # 创建形状为“shape”的随机实值张量。如果`标准化`是 是的，确保每列的均值为 0 和标准值为 1
 def random_tensor(shape, standardize=False):
     offset = np.random.randint(-300, 300, shape)
-    X = np.random.rand(*shape) + offset
+    # np.random.rand 通过本函数可以返回一个或一组服从“0~1”均匀分布的随机样本值
+    randomTmp = np.random.rand(*shape)
+    # 数组相加
+    X = randomTmp + offset
 
     if standardize:
         eps = np.finfo(float).eps
+        print(eps)    
         X = (X - X.mean(axis=0)) / (X.std(axis=0) + eps)
     return X
 
@@ -27,11 +31,13 @@ def test_GaussianNB(N=10):
         n_ex = np.random.randint(1, 300)
         n_feats = np.random.randint(1, 100)
         n_classes = np.random.randint(2, 10)
-
+        print(n_ex, n_feats, n_classes)
+        
+        # 生成一个n_ex列n_feats行的矩阵
         X = random_tensor((n_ex, n_feats), standardize=True)
-        y = np.random.randint(0, n_classes, size=n_ex)
+        # y = np.random.randint(0, n_classes, size=n_ex)
 
-        X_test = random_tensor((n_ex, n_feats), standardize=True)
+        # X_test = random_tensor((n_ex, n_feats), standardize=True)
 
         # NB = GaussianNBClassifier(eps=1e-09)
         # NB.fit(X, y)
@@ -78,7 +84,7 @@ def test_GaussianNB(N=10):
 
         # np.testing.assert_almost_equal(preds, sk_preds)
         # print("PASSED")
-        # i += 1
+        i += 1
 
 if __name__ == "__main__":
     test_GaussianNB(1)
